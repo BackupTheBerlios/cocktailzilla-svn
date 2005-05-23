@@ -1,0 +1,24 @@
+exampledir=$(bindir)
+example_SCRIPTS = StudentManager.exe
+EXTRA_DIST = $(example_sources) $(example_sources_in)
+CLEANFILES = StudentSutdentManager.exe
+
+example_sources_in = AssemblyInfo.cs.in
+example_generated_sources = $(example_sources_in:.in=)
+example_sources = Model/Data/DatabaseConnection.cs Model/DataNode.cs Model/StudentDataNode.cs Model/StudentData.cs Controller/Controller.cs GtkView/BaseForm.cs GtkView/StartForm.cs GtkView/MainForm.cs Model/Data/GtkDataGrid.cs GtkView/DataView.cs GtkView/StudentForm.cs GtkView/StudentsForm.cs GtkView/CourseForm.cs GtkView/CoursesForm.cs GtkView/SubscriptionForm.cs GtkView/SubscriptionsForm.cs Model/CourseData.cs Model/CourseDataNode.cs Model/SubscriptionData.cs Model/SubscriptionDataNode.cs
+
+CSHARP_LIBS=-r:System.Data -r:daab.dll -r:System.Windows.Forms -r:System.Web -r:Microsoft.ApplicationBlocks.UIProcess.dll -r:System.Drawing -r:GotDotNet.ApplicationBlocks.Data.dll -r:glib-sharp -r:gtk-sharp -r:gdk-sharp -lib:/usr/lib/mono/gtk-sharp/
+
+
+example_build_sources = $(addprefix $(srcdir)/, $(example_sources))
+example_build_sources += $(example_generated_sources)
+
+StudentManager.exe: cpdll $(exmaple_build_sources)
+	$(MCS) $(GTKSHARP_LIBS) $(embedded) $(CSHARP_LIBS) -g -out:$@ $(example_build_sources)
+
+cpdll:
+	cp ../dll.Microsoft.daab.1/daab.dll $(srcdir)
+	cp ../dll.Microsoft.UIP.2/Microsoft.ApplicationBlocks.UIProcess.dll $(srcdir)
+	cp ../dll.GotDotNet.daab.3/GotDotNet.ApplicationBlocks.Data.dll $(srcdir)
+
+
